@@ -316,7 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton.icon(
               onPressed: (){
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Kamu telah menekan tombol Logout")),
+                  const SnackBar(content: Text("Kamu telah menekan tombol Lihat Daftar Produk")),
                 );
                 _scrollToProducts();
               },
