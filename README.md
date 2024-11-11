@@ -7,6 +7,7 @@
 
 # Table of Contents
 - [Tugas 7](#tugas-7)
+- [Tugas 8](#tugas-8)
 
 # TUGAS 7
 [Back to Table of Contents](#table-of-contents)
@@ -125,4 +126,86 @@
         child: const Icon(Icons.add, color: Colors.white),
       ),
     ...
+    ```
+
+# TUGAS 8
+[Back to Table of Contents](#table-of-contents)
+## Jawaban
+1. Kegunaan ```const```, keuntungannya, kapan sebaiknya digunakan, dan kapan sebaiknya tidak digunakan
+
+  - ```const``` digunakan untuk membuat widget atau objek yang bersifat konstan (immutable). berarti niai dari objek atau widget akan selalu konsisten dan tidak akan berubah selama runtime.
+
+  - **keuntungan** menggunakan ```const```:
+    - **Optimalisasi performa**, karena dengan menggunakan ```const```, flutter tidap perlu membuat ulang widget ketika UI diperbarui, karena tidak pernah berubah
+    - **Penggunaan memori yang lebih rendah**, karena widget atau objek yang menggunakan ```const``` diinisialisasi hanya sekali
+    - **Debugging lebih mudah**, karena ```const``` tidak akan berubah, jadi bagian yang menggunakan ini tidak akan termodifikasi secara tidak sengaja selama aplikasi dijalankan
+  
+  - Kapan **sebaiknya** menggunakan ```const```?
+
+    ```const``` sebaiknya digunakan pada widget atau objek yang tidak perlu diubah selama aplikasi berjalan, seperti teks tetap dan dekorasi yang tidak akan diubah.
+  
+  - Kapan **sebaiknya tidak** menggunakan ```const```?
+
+    ```const``` sebaiknya tidak digunakan pada widget atau objek yang perlu/akan diubah selama aplikasi berjalan, karena ```const``` tidak dapat diperbarui tanpa melakukan rebuild.
+
+2. Perbandingan ```column``` dan ```row``` pada flutter
+  - **Column**
+
+    ```Column``` digunakan untuk menyusun widget secara vertikal dari atas ke bawah, contoh implementasi nya:
+    ```bash
+    Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Item 1"),
+        Text("Item 2"),
+        Text("Item 3"),
+      ],
+    )
+    ```
+
+  - **Row**
+
+    ```Row``` digunakan untuk menyusun widget secara horizontal dari kiri ke kanan, contoh implementasi nya:
+    ```bash
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(Icons.home),
+        Icon(Icons.favorite),
+        Icon(Icons.settings),
+      ],
+    )
+    ```
+
+3. **Elemen-elemen input** yang saya gunakan pada halaman form
+  - ```TextFormField```: digunakan untuk menerima input dalam bentuk teks, seperti nama, deskripsi, URL, dan integer.
+  - ```ElevatedButton```: tombol yang saya gunakan untuk menyimpan data yang diinput pada form.
+
+4. Cara mengatur **tema (theme)** dalam aplikasi flutter
+  saya mengatur tema pada aplikasi flutter saya menggunakan ```ThemeApp``` di dalam ```MaterialApp```, di sini saya menentukan warna dasar dan secondary color untuk tema saya. seperti ini implementasinya:
+
+    ```bash
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.deepPurple,
+      ).copyWith(secondary: Colors.deepPurple),
+    ),
+    ```
+
+5. **Navigasi** dalam aplikasi flutter
+  untuk navigasi, saya menggunakan ```Navigator``` dengan ```MaterialPageRoute```. ```Navigator.push``` digunakan untuk menuju suatu halaman dan ```Navigator.pop``` digunakan untuk kembali ke halaman sebelumnya. contoh implementasi nya:
+    ```bash
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ProductEntryFormPage(),
+        ));
+      },
+      ...
+      onPressed: () {
+        Navigator.pop(context);
+      ...
     ```
