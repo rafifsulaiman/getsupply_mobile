@@ -833,6 +833,7 @@ Langkah-langkah Autentikasi:
     import 'package:provider/provider.dart';
     import 'package:pbp_django_auth/pbp_django_auth.dart';
     import 'package:getsupply_mobile/widgets/left_drawer.dart';
+    import 'package:getsupply_mobile/screens/item_detail.dart';
 
     class SupplyEntryPage extends StatefulWidget {
       const SupplyEntryPage({super.key});
@@ -843,10 +844,8 @@ Langkah-langkah Autentikasi:
 
     class _SupplyEntryPageState extends State<SupplyEntryPage> {
       Future<List<SupplyEntry>> fetchProduct(CookieRequest request) async {
-        // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
         final response = await request.get('http://127.0.0.1:8000/json/');
 
-        // Melakukan decode response menjadi bentuk json
         var data = response;
         List<SupplyEntry> supplyList = [];
         for (var d in data) {
@@ -882,42 +881,173 @@ Langkah-langkah Autentikasi:
                     ],
                   );
                 } else {
-                  return ListView.builder(
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 items per row
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                      childAspectRatio: 1.5, // Aspect ratio to make them horizontal
+                    ),
                     itemCount: snapshot.data!.length,
-                    itemBuilder: (_, index) => Container(
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      padding: const EdgeInsets.all(20.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${snapshot.data![index].fields.name}",
-                            style: const TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                    itemBuilder: (_, index) => Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0), // Reduced padding for smaller box
+                        child: Row( // Ensuring horizontal layout with Row
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Product image on the left
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: snapshot.data![index].fields.image.isNotEmpty
+                                  ? Image.network(
+                                      snapshot.data![index].fields.image,
+                                      width: 150,  // Increased image size
+                                      height: 150, // Increased image size
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Icon(Icons.image, size: 150),
                             ),
-                          ),
-                          const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.price}"),
-                          const SizedBox(height: 10),
-                          Text("${snapshot.data![index].fields.description}"),
-                          const SizedBox(height: 10),
-                          snapshot.data![index].fields.image.isNotEmpty
-                              ? Image.network(
-                                  snapshot.data![index].fields.image,
-                                  height: 200, // You can adjust the height or width
-                                  fit: BoxFit.cover, // Adjust the fit for the image
-                                )
-                              : const Text('No image available'),
-                        ],
+                            const SizedBox(width: 16),
+                            // Product content on the right
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    snapshot.data![index].fields.name,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    snapshot.data![index].fields.description,
+                                    style: const TextStyle(fontSize: 14),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                  const Divider(
+                                    color: Colors.black,
+                                    thickness: 2,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    "Rp ${snapshot.data![index].fields.price}",
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                                                ElevatedButton(
+                                    onPressed: () {
+                                      // Navigate to the ItemDetailPage
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ItemDetailPage(
+                                              item: snapshot.data![index]),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('View Details'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
                 }
               }
             },
+          ),
+        );
+      }
+    }
+    ```
+
+  - lalu, saya membuat file baru untuk menampikan detail tiap item pada `screens` bernama `item_detail.dart`, seperti ini isinya
+
+    ```bash
+    import 'package:flutter/material.dart';
+    import 'package:getsupply_mobile/models/supply_entry.dart';
+
+    class ItemDetailPage extends StatelessWidget {
+      final SupplyEntry item;
+
+      ItemDetailPage({required this.item});
+
+      @override
+      Widget build(BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(item.fields.name),
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Menempatkan gambar di sebelah kanan teks
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Teks di sebelah kiri
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.fields.name,
+                            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(
+                            'Price: Rp ${item.fields.price}',
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                          SizedBox(height: 16.0),
+                          Text(
+                            'Description: ',
+                            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8.0),
+                          Text(item.fields.description),
+                        ],
+                      ),
+                    ),
+                    // Gambar yang diletakkan di sebelah kanan
+                    SizedBox(width: 16.0), // Memberikan jarak antara gambar dan teks
+                    Container(
+                      width: 120,  // Ukuran gambar
+                      height: 120, // Ukuran gambar
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: NetworkImage(item.fields.image),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.0),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Kembali ke halaman daftar item
+                  },
+                  child: Text('Back to Item List'),
+                ),
+              ],
+            ),
           ),
         );
       }

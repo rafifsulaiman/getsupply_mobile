@@ -3,6 +3,7 @@ import 'package:getsupply_mobile/models/supply_entry.dart';
 import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:getsupply_mobile/widgets/left_drawer.dart';
+import 'package:getsupply_mobile/screens/item_detail.dart';
 
 class SupplyEntryPage extends StatefulWidget {
   const SupplyEntryPage({super.key});
@@ -112,6 +113,19 @@ class _SupplyEntryPageState extends State<SupplyEntryPage> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                                                            ElevatedButton(
+                                onPressed: () {
+                                  // Navigate to the ItemDetailPage
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ItemDetailPage(
+                                          item: snapshot.data![index]),
+                                    ),
+                                  );
+                                },
+                                child: const Text('View Details'),
                               ),
                             ],
                           ),
