@@ -42,7 +42,7 @@ class LeftDrawer extends StatelessWidget {
     },
   ),
   ListTile(
-    leading: const Icon(Icons.mood),
+    leading: const Icon(Icons.add),
     title: const Text('Add Product'),
     onTap: () {
       Navigator.push(
@@ -53,7 +53,7 @@ class LeftDrawer extends StatelessWidget {
     },
   ),
   ListTile(
-    leading: const Icon(Icons.add_reaction_rounded),
+    leading: const Icon(Icons.shopping_cart_outlined),
     title: const Text('Product List'),
     onTap: () {
       Navigator.push(

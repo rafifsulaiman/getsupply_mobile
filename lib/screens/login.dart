@@ -1,5 +1,6 @@
-import 'package:getsupply_mobile/screens/menu.dart';
+// import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:getsupply_mobile/screens/menu.dart';
 import 'package:getsupply_mobile/screens/register.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -42,30 +43,40 @@ class _LoginPageState extends State<LoginPage> {
     final request = context.watch<CookieRequest>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Card(
             elevation: 8,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
+              borderRadius: BorderRadius.circular(16.0),
             ),
+            color: Colors.white,  // Main container color set to light gray
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Login',
+                    'GetSupply',
                     style: TextStyle(
-                      fontSize: 24.0,
+                      fontSize: 50.0,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 30.0),
+                  const SizedBox(height: 20),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Log In To Your Account',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
                   TextField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
@@ -98,10 +109,6 @@ class _LoginPageState extends State<LoginPage> {
                       String username = _usernameController.text;
                       String password = _passwordController.text;
 
-                      // Cek kredensial
-                      // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                      // Untuk menyambungkan Android emulator dengan Django pada localhost,
-                      // gunakan URL http://10.0.2.2/
                       final response = await request
                           .login("http://127.0.0.1:8000/auth/login/", {
                         'username': username,
@@ -151,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                     ),
-                    child: const Text('Login'),
+                    child: const Text('Log In'),
                   ),
                   const SizedBox(height: 36.0),
                   GestureDetector(
@@ -162,11 +169,23 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (context) => const RegisterPage()),
                       );
                     },
-                    child: Text(
-                      'Don\'t have an account? Register',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 16.0,
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Don\'t have an account? ',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'Register',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
